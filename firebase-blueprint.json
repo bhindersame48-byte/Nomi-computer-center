@@ -1,0 +1,123 @@
+{
+  "entities": {
+    "Admission": {
+      "title": "Admission",
+      "description": "Student online admission request and office ledger record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique registration registry short readable tag identifier (e.g., AD-4532)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved"],
+          "description": "Review state of student admission form"
+        },
+        "name": {
+          "type": "string",
+          "description": "Student full name"
+        },
+        "religion": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string",
+          "format": "date"
+        },
+        "hobbies": {
+          "type": "string"
+        },
+        "courseName": {
+          "type": "string"
+        },
+        "homeAddress": {
+          "type": "string"
+        },
+        "studentPhone": {
+          "type": "string"
+        },
+        "studentMobile": {
+          "type": "string"
+        },
+        "studentEmail": {
+          "type": "string"
+        },
+        "fatherName": {
+          "type": "string"
+        },
+        "guardianName": {
+          "type": "string"
+        },
+        "parentOccupation": {
+          "type": "string"
+        },
+        "parentMonthlyIncome": {
+          "type": "string"
+        },
+        "parentPhoneOffice": {
+          "type": "string"
+        },
+        "parentPhone": {
+          "type": "string"
+        },
+        "parentBusinessAddress": {
+          "type": "string"
+        },
+        "parentEmail": {
+          "type": "string"
+        },
+        "rulesAccepted": {
+          "type": "boolean"
+        },
+        "dated": {
+          "type": "string",
+          "format": "date"
+        },
+        "signStudent": {
+          "type": "string"
+        },
+        "signParent": {
+          "type": "string"
+        },
+        "submittedAt": {
+          "type": "string"
+        },
+        "receiptNo": {
+          "type": "string"
+        },
+        "receiptDate": {
+          "type": "string"
+        },
+        "monthlyFees": {
+          "type": "string"
+        },
+        "officeCourseName": {
+          "type": "string"
+        },
+        "admittedToGrade": {
+          "type": "string"
+        },
+        "registrationNo": {
+          "type": "string"
+        },
+        "registrarName": {
+          "type": "string"
+        },
+        "vicePrincipalName": {
+          "type": "string"
+        },
+        "principalName": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "courseName", "studentMobile", "rulesAccepted"]
+    }
+  },
+  "firestore": {
+    "admissions": {
+      "schema": { "$ref": "#/entities/Admission" },
+      "description": "Store all student admission registrations and administrative Ledger approvals"
+    }
+  }
+}

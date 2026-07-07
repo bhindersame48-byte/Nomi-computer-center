@@ -1,0 +1,6 @@
+{
+  "name": "Nomi Computers",
+  "description": "Premium laptop showroom and professional computer applications academy in Dunyapur, Pakistan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
