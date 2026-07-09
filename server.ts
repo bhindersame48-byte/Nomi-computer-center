@@ -637,10 +637,10 @@ User Inquiry: "${message}"
 
   // Auth validator helper for headers
   const requireAdminAuth = (req: any, res: any, next: any) => {
-    const emailStr = req.headers["x-admin-email"] || req.query.adminEmail;
-    const passStr = req.headers["x-admin-password"] || req.query.adminPassword;
+    const emailStr = (req.headers["x-admin-email"] || req.query.adminEmail || "") as string;
+    const passStr = (req.headers["x-admin-password"] || req.query.adminPassword || "") as string;
     
-    if (emailStr === "yousafshahid786@gmail.com" && passStr === "Justlisten928$") {
+    if (emailStr.trim().toLowerCase() === "yousafshahid786@gmail.com" && passStr === "Justlisten928$") {
       next();
     } else {
       res.status(401).json({ error: "Access Denied: Unauthenticated requests are rejected. Admin permissions required!" });
@@ -1095,7 +1095,8 @@ User Inquiry: "${message}"
   // Admin Verification Login API
   app.post("/api/admin/login", (req, res) => {
     const { email, password } = req.body;
-    if (email === "yousafshahid786@gmail.com" && password === "Justlisten928$") {
+    const emailStr = (email || "") as string;
+    if (emailStr.trim().toLowerCase() === "yousafshahid786@gmail.com" && password === "Justlisten928$") {
       res.json({ success: true, message: "Welcome back Admin." });
     } else {
       res.status(401).json({ error: "Unauthorized: Invalid Admin Gmail or Security Key!" });

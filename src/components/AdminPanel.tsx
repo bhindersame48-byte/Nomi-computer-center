@@ -255,12 +255,12 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
       });
 
       const data = await response.json();
       if (response.ok && data.success) {
-        localStorage.setItem("nomi_admin_email", email);
+        localStorage.setItem("nomi_admin_email", email.trim().toLowerCase());
         localStorage.setItem("nomi_admin_pass", password);
         setIsLoggedIn(true);
       } else {
