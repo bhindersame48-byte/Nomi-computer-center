@@ -59,7 +59,32 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
     if (!file) return;
     const reader = new FileReader();
     reader.onloadend = () => {
-      setter({ ...formState, image: reader.result as string });
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        setter({ ...formState, image: dataUrl });
+      };
+      img.src = reader.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -722,21 +747,32 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="yousafshahid786@gmail.com"
+                  placeholder="Enter admin email"
+                  autoComplete="off"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-450"
                 />
               </div>
 
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block font-sans">Security Password Key</label>
-                <input 
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••••"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-450"
-                />
+                <div className="relative">
+                  <input 
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder=""
+                    autoComplete="off"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-amber-450 text-transparent selection:bg-transparent caret-slate-850 relative z-10"
+                  />
+                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-slate-850 z-0">
+                    {password.length > 0 ? (
+                      <span className="tracking-widest text-xs mt-[2px]">•••••••••••••••</span>
+                    ) : (
+                      <span className="text-slate-400 text-xs">••••••••••••••</span>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {loginError && (

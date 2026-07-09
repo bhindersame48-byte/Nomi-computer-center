@@ -61,6 +61,30 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
+  // Middleware to prevent Firestore document size limit errors (1 MiB)
+  // Rejects large base64 strings early instead of letting Firestore fail
+  app.use((req, res, next) => {
+    if (req.body) {
+      try {
+        const checkLargeStrings = (obj: any) => {
+          if (typeof obj === 'string') {
+            if (obj.length > 900000) { // ~900KB
+              throw new Error("Payload size limit exceeded: The uploaded image is too large for the database. Please compress your image to under 800KB before uploading, or paste an external image URL instead.");
+            }
+          } else if (typeof obj === 'object' && obj !== null) {
+            for (const key in obj) {
+              checkLargeStrings(obj[key]);
+            }
+          }
+        };
+        checkLargeStrings(req.body);
+      } catch (err: any) {
+        return res.status(400).json({ error: err.message });
+      }
+    }
+    next();
+  });
+
   // Chat/Tech Academic Advisor API route
   app.post("/api/gemini/advisor", async (req, res) => {
     try {
