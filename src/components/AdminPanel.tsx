@@ -48,10 +48,21 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
   useEffect(() => {
     const savedEmail = localStorage.getItem("nomi_admin_email");
     const savedPass = localStorage.getItem("nomi_admin_pass");
-    if (savedEmail === "bhindersame48@gmail.com" && savedPass === "DrLaibaTariq928!") {
+    if (savedEmail === "yousafshahid786@gmail.com" && savedPass === "Justlisten928$") {
       setIsLoggedIn(true);
     }
   }, []);
+
+  // File upload handler
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (value: any) => void, formState: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setter({ ...formState, image: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Fetch lists
   const fetchAllData = async () => {
@@ -711,7 +722,7 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="bhindersame48@gmail.com"
+                  placeholder="yousafshahid786@gmail.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs text-slate-850 focus:outline-none focus:ring-1 focus:ring-amber-450"
                 />
               </div>
@@ -1534,14 +1545,22 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Showcase Image JPG Link URL</label>
-                  <input 
-                    type="text"
-                    value={accessoryForm.image || ""}
-                    onChange={(e) => setAccessoryForm({ ...accessoryForm, image: e.target.value })}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-850 focus:outline-none"
-                  />
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">Showcase Image (URL or File Upload)</label>
+                  <div className="flex flex-col gap-2">
+                    <input 
+                      type="text"
+                      value={accessoryForm.image || ""}
+                      onChange={(e) => setAccessoryForm({ ...accessoryForm, image: e.target.value })}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-850 focus:outline-none"
+                    />
+                    <input 
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, setAccessoryForm, accessoryForm)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-850 focus:outline-none text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1">
@@ -1729,14 +1748,22 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Showcase Image JPG Link URL</label>
-                  <input 
-                    type="text"
-                    value={laptopForm.image || ""}
-                    onChange={(e) => setLaptopForm({ ...laptopForm, image: e.target.value })}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800"
-                  />
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">Showcase Image (URL or File Upload)</label>
+                  <div className="flex flex-col gap-2">
+                    <input 
+                      type="text"
+                      value={laptopForm.image || ""}
+                      onChange={(e) => setLaptopForm({ ...laptopForm, image: e.target.value })}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800"
+                    />
+                    <input 
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, setLaptopForm, laptopForm)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1">

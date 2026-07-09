@@ -58,7 +58,8 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
   // Chat/Tech Academic Advisor API route
   app.post("/api/gemini/advisor", async (req, res) => {
@@ -606,7 +607,7 @@ User Inquiry: "${message}"
     const emailStr = req.headers["x-admin-email"] || req.query.adminEmail;
     const passStr = req.headers["x-admin-password"] || req.query.adminPassword;
     
-    if (emailStr === "bhindersame48@gmail.com" && passStr === "DrLaibaTariq928!") {
+    if (emailStr === "yousafshahid786@gmail.com" && passStr === "Justlisten928$") {
       next();
     } else {
       res.status(401).json({ error: "Access Denied: Unauthenticated requests are rejected. Admin permissions required!" });
@@ -1061,7 +1062,7 @@ User Inquiry: "${message}"
   // Admin Verification Login API
   app.post("/api/admin/login", (req, res) => {
     const { email, password } = req.body;
-    if (email === "bhindersame48@gmail.com" && password === "DrLaibaTariq928!") {
+    if (email === "yousafshahid786@gmail.com" && password === "Justlisten928$") {
       res.json({ success: true, message: "Welcome back Admin." });
     } else {
       res.status(401).json({ error: "Unauthorized: Invalid Admin Gmail or Security Key!" });
@@ -1509,7 +1510,7 @@ User Inquiry: "${message}"
       const laptopsSnap = await getDocs(laptopsCol);
       if (laptopsSnap.empty) {
         console.log("Seeding laptops to Firestore...");
-        const dbLocal = JSON.parse(fs.readFileSync("./db_local.json", "utf-8"));
+        const dbLocal = readDB();
         for (const item of dbLocal.laptops || []) {
           await setDoc(doc(db, "laptops", item.id), item);
         }
@@ -1520,7 +1521,7 @@ User Inquiry: "${message}"
       const accsSnap = await getDocs(accsCol);
       if (accsSnap.empty) {
         console.log("Seeding accessories to Firestore...");
-        const dbLocal = JSON.parse(fs.readFileSync("./db_local.json", "utf-8"));
+        const dbLocal = readDB();
         for (const item of dbLocal.accessories || []) {
           await setDoc(doc(db, "accessories", item.id), item);
         }
@@ -1531,7 +1532,7 @@ User Inquiry: "${message}"
       const coursesSnap = await getDocs(coursesCol);
       if (coursesSnap.empty) {
         console.log("Seeding courses to Firestore...");
-        const dbLocal = JSON.parse(fs.readFileSync("./db_local.json", "utf-8"));
+        const dbLocal = readDB();
         for (const item of dbLocal.courses || []) {
           await setDoc(doc(db, "courses", item.id), item);
         }
@@ -1542,7 +1543,7 @@ User Inquiry: "${message}"
       const jobsSnap = await getDocs(jobsCol);
       if (jobsSnap.empty) {
         console.log("Seeding jobs to Firestore...");
-        const dbLocal = JSON.parse(fs.readFileSync("./db_local.json", "utf-8"));
+        const dbLocal = readDB();
         for (const item of dbLocal.jobs || []) {
           await setDoc(doc(db, "jobs", item.id), item);
         }
@@ -1553,7 +1554,7 @@ User Inquiry: "${message}"
     }
   };
 
-  await seedDatabaseIfNeeded();
+  seedDatabaseIfNeeded(); // Do not await, let it run in background so server can start
 
   // Integrates Vite production or development server
   if (process.env.NODE_ENV !== "production") {
