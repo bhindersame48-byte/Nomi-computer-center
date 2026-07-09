@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createServer as createViteServer } from "vite";
+
 import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
 import crypto from "crypto";
@@ -183,7 +183,7 @@ User Inquiry: "${message}"
   });
 
   // Real server-side relative JSON storage backing laps, courses, and bookings
-  const DB_FILE = path.join(process.cwd(), "db_local.json");
+  const DB_FILE = process.env.NETLIFY ? "/tmp/db_local.json" : path.join(process.cwd(), "db_local.json");
 
   const DEFAULT_DB = {
     laptops: [
@@ -1588,11 +1588,14 @@ User Inquiry: "${message}"
     }
   };
 
-  seedDatabaseIfNeeded(); // Do not await, let it run in background so server can start
+  if (!process.env.NETLIFY && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    seedDatabaseIfNeeded();
+  }
 
 async function startServer() {
   // Integrates Vite production or development server
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -1606,7 +1609,7 @@ async function startServer() {
     });
   }
 
-  if (!process.env.NETLIFY) {
+  if (!process.env.NETLIFY && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Nomi Computers Server is active on port ${PORT}`);
@@ -1614,6 +1617,6 @@ async function startServer() {
   }
 }
 
-if (!process.env.NETLIFY) {
+if (!process.env.NETLIFY && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
   startServer();
 }
