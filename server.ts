@@ -54,8 +54,8 @@ function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
 }
 
-async function startServer() {
-  const app = express();
+export const app = express();
+
   const PORT = 3000;
 
   app.use(express.json({ limit: "50mb" }));
@@ -1590,6 +1590,7 @@ User Inquiry: "${message}"
 
   seedDatabaseIfNeeded(); // Do not await, let it run in background so server can start
 
+async function startServer() {
   // Integrates Vite production or development server
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -1605,9 +1606,14 @@ User Inquiry: "${message}"
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Nomi Computers Server is active on port ${PORT}`);
-  });
+  if (!process.env.NETLIFY) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Nomi Computers Server is active on port ${PORT}`);
+    });
+  }
 }
 
-startServer();
+if (!process.env.NETLIFY) {
+  startServer();
+}
