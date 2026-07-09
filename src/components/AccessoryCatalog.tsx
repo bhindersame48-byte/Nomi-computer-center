@@ -15,7 +15,7 @@ export default function AccessoryCatalog() {
 
   // Fetch from DB
   useEffect(() => {
-    fetch("/api/accessories")
+    fetch("/api/accessories", { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Catalog load failed");
         return res.json();

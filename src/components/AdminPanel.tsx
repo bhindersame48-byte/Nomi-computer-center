@@ -100,10 +100,10 @@ export default function AdminPanel({ onClose, onRefreshCatalog }: AdminPanelProp
     try {
       // Fetch laptops, accessories, courses, and jobs in parallel (admissions, bookings, and applications are real-time synced)
       const [resLaps, resAccs, resCourses, resJobs] = await Promise.all([
-        fetch("/api/laptops"),
-        fetch("/api/accessories"),
-        fetch("/api/courses"),
-        fetch("/api/jobs")
+        fetch("/api/laptops", { cache: "no-store" }),
+        fetch("/api/accessories", { cache: "no-store" }),
+        fetch("/api/courses", { cache: "no-store" }),
+        fetch("/api/jobs", { cache: "no-store" })
       ]);
 
       if (resLaps.ok) {

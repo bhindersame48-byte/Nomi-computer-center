@@ -11,7 +11,7 @@ export default function CourseAcademy() {
   const [expandedSyllabus, setExpandedSyllabus] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/courses")
+    fetch("/api/courses", { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Courses load failed");
         return res.json();

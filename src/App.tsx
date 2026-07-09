@@ -101,7 +101,7 @@ export default function App() {
   const fetchActiveJobs = async () => {
     setLoadingJobs(true);
     try {
-      const res = await fetch("/api/jobs");
+      const res = await fetch("/api/jobs", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         // Only display active job listings to standard users

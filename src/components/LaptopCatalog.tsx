@@ -16,7 +16,7 @@ export default function LaptopCatalog() {
   const [selectedLaptop, setSelectedLaptop] = useState<Laptop | null>(null);
 
   useEffect(() => {
-    fetch("/api/laptops")
+    fetch("/api/laptops", { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Catalog load failed");
         return res.json();
